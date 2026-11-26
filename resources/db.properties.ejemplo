@@ -1,0 +1,9 @@
+# ============================================================================
+# ARCHIVO DE EJEMPLO DE CONFIGURACIÓN - GREENTRACK
+# ============================================================================
+# Copie este archivo como 'db.properties' y configure sus credenciales locales.
+# ============================================================================
+
+db.url=jdbc:mysql://localhost:3306/green_track?useSSL=false&serverTimezone=America/Mexico_City&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+db.user=tu_usuario_mysql
+db.password=tu_contrasena_mysql

@@ -1,0 +1,2 @@
+Coloca aquí el archivo del conector JDBC de MySQL (ejemplo: mysql-connector-j-8.3.0.jar o mysql-connector-java-8.0.x.jar).
+Los scripts `compilar.sh`, `ejecutar.sh` y `probar.sh` incluirán automáticamente cualquier archivo .jar ubicado en esta carpeta dentro del CLASSPATH.

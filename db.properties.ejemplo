@@ -1,0 +1,11 @@
+# ============================================================================
+# db.properties — Configuración de conexión a la base de datos
+# ============================================================================
+# Renombre este archivo a 'db.properties' y ajuste los valores según
+# su entorno. NO incluya este archivo en control de versiones si
+# contiene contraseñas reales.
+# ============================================================================
+
+db.url=jdbc:mysql://localhost:3306/green_track?useSSL=false&serverTimezone=America/Mexico_City&allowPublicKeyRetrieval=true
+db.user=root
+db.password=tu_contraseña_aqui

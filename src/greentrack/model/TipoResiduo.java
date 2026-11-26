@@ -1,0 +1,59 @@
+package greentrack.model;
+
+/**
+ * Entidad TipoResiduo: Define la categoría de material reciclable (Plástico, Papel, Vidrio, etc.).
+ */
+public class TipoResiduo {
+
+    private int id;
+    private String nombre;
+    private String descripcion;
+    private boolean estado; // true = ACTIVO, false = INACTIVO
+
+    public TipoResiduo() {
+    }
+
+    public TipoResiduo(int id, String nombre, String descripcion, boolean estado) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.estado = estado;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
+}
