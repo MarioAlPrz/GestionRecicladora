@@ -97,7 +97,7 @@ public class VentanaLogin extends JFrame {
         tarjeta.add(lblUser, gbc);
 
         gbc.gridy = 1;
-        txtUsuario = new JTextField("admin");
+        txtUsuario = new JTextField();
         txtUsuario.setFont(new Font("SansSerif", Font.PLAIN, 14));
         txtUsuario.setPreferredSize(new Dimension(0, 34));
         tarjeta.add(txtUsuario, gbc);
@@ -110,7 +110,7 @@ public class VentanaLogin extends JFrame {
         tarjeta.add(lblPass, gbc);
 
         gbc.gridy = 3;
-        txtContrasena = new JPasswordField("admin123");
+        txtContrasena = new JPasswordField();
         txtContrasena.setFont(new Font("SansSerif", Font.PLAIN, 14));
         txtContrasena.setPreferredSize(new Dimension(0, 34));
         txtContrasena.addKeyListener(new KeyAdapter() {
@@ -206,8 +206,9 @@ public class VentanaLogin extends JFrame {
                                 "Verifique su usuario y contraseña.");
                     }
                 } catch (Exception ex) {
+                    Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
                     Validaciones.mostrarError(VentanaLogin.this,
-                            "Error al conectar con la base de datos MySQL:\n" + ex.getMessage());
+                            "Error al conectar con la base de datos MySQL:\n" + cause.getMessage());
                 }
             }
         };

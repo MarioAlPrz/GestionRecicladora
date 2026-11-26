@@ -50,6 +50,7 @@ public class UsuarioDAO {
             }
         } catch (SQLException e) {
             System.err.println("Error en autenticación: " + e.getMessage());
+            throw new RuntimeException("Error al conectar con la base de datos MySQL: " + e.getMessage(), e);
         }
         return null;
     }

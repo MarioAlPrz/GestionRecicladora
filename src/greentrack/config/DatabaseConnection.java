@@ -7,78 +7,60 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Administrador central de la conexión JDBC mediante el patrón Singleton.
- * Garantiza reutilización de la conexión y configuración de la variable de sesión
- * @usuario_id requerida por los triggers de auditoría de MySQL.
+ * Administrador central de la conexión JDBC a MySQL.
+ * Proporciona conexiones seguras para cada operación y sincroniza
+ * la variable de sesión @usuario_id para los triggers de auditoría.
  */
 public class DatabaseConnection {
 
-    private static Connection conexion = null;
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch (ClassNotFoundException ignored) {
+            }
+        }
+    }
 
     private DatabaseConnection() {
     }
 
     /**
      * Obtiene una conexión activa a MySQL.
-     * Si no existe o se cerró, establece una nueva.
+     * Cada llamada devuelve una conexión independiente para evitar condiciones de carrera entre hilos.
      */
-    public static synchronized Connection getConnection() throws SQLException {
-        if (conexion == null || conexion.isClosed()) {
-            try {
-                // Registrar driver MySQL
-                Class.forName("com.mysql.cj.jdbc.Driver");
-            } catch (ClassNotFoundException e) {
-                // Si no está el driver nuevo, intentar con el anterior
-                try {
-                    Class.forName("com.mysql.jdbc.Driver");
-                } catch (ClassNotFoundException ignored) {
-                }
+    public static Connection getConnection() throws SQLException {
+        Connection conn = DriverManager.getConnection(
+                DatabaseConfig.getUrl(),
+                DatabaseConfig.getUser(),
+                DatabaseConfig.getPassword()
+        );
+
+        // Sincronizar el usuario de sesión para los triggers de auditoría
+        int uid = SesionUsuario.getUsuarioId();
+        try (Statement st = conn.createStatement()) {
+            if (uid > 0) {
+                st.execute("SET @usuario_id = " + uid);
+            } else {
+                st.execute("SET @usuario_id = NULL");
             }
-
-            conexion = DriverManager.getConnection(
-                    DatabaseConfig.getUrl(),
-                    DatabaseConfig.getUser(),
-                    DatabaseConfig.getPassword()
-            );
-
-            // Sincronizar usuario de sesión para triggers de auditoría
-            actualizarVariableSesionMySQL();
+        } catch (SQLException ignored) {
         }
-        return conexion;
+
+        return conn;
     }
 
     /**
-     * Actualiza la variable de sesión @usuario_id en MySQL para que los triggers
-     * de auditoría registren correctamente qué usuario ejecutó la acción.
+     * Mantenido por compatibilidad.
      */
     public static void actualizarVariableSesionMySQL() {
-        if (conexion != null) {
-            try (Statement st = conexion.createStatement()) {
-                int uid = SesionUsuario.getUsuarioId();
-                if (uid > 0) {
-                    st.execute("SET @usuario_id = " + uid);
-                } else {
-                    st.execute("SET @usuario_id = NULL");
-                }
-            } catch (SQLException ignored) {
-            }
-        }
     }
 
     /**
-     * Cierra la conexión activa si existe.
+     * Mantenido por compatibilidad.
      */
-    public static synchronized void closeConnection() {
-        if (conexion != null) {
-            try {
-                if (!conexion.isClosed()) {
-                    conexion.close();
-                }
-            } catch (SQLException e) {
-                System.err.println("Error al cerrar conexión JDBC: " + e.getMessage());
-            } finally {
-                conexion = null;
-            }
-        }
+    public static void closeConnection() {
     }
 }

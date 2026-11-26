@@ -382,9 +382,11 @@ public class front_principal extends JFrame {
                 new VentanaUsuarios(this);
                 break;
             case "Registrar recolección":
+            case "Registrar Recolección":
                 new VentanaRegistrarRecoleccion(this);
                 break;
             case "Buscar contenedor":
+            case "Buscar Contenedor":
                 new VentanaBuscarContenedor(this);
                 break;
         }
